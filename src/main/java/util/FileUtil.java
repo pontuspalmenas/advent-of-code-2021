@@ -4,14 +4,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
 public class FileUtil {
     private static final Pattern PARAGRAPH = Pattern.compile("\\s*^\\s*$\\s*", Pattern.MULTILINE);
 
-    public static List<String> Read(String path) {
+    public static List<String> read(String path) {
         try {
             return Files.lines(Path.of(path)).toList();
         } catch (IOException e) {
@@ -20,7 +19,7 @@ public class FileUtil {
     }
 
     // Reads the input as blocks separated by empty line
-    public static List<List<String>> ReadBlocks(String path) {
+    public static List<List<String>> readBlocks(String path) {
         try {
             var out = new ArrayList<List<String>>();
             var lines = Files.readString(Path.of(path));

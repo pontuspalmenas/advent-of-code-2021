@@ -5,12 +5,12 @@ import java.util.List;
 
 public class Day1 {
     public static void main(String[] args) {
-        var in = Util.Ints(FileUtil.Read("input/day1.txt"));
-        System.out.println(Solve1(in));
-        System.out.println(Solve2(in));
+        var in = Util.ints(FileUtil.read("input/day1.txt"));
+        System.out.println(solve1(in));
+        System.out.println(solve2(in));
     }
 
-    private static int Solve1(List<Integer> l) {
+    private static int solve1(List<Integer> l) {
         int prev = l.get(0);
         int count = 0;
         for (int i : l) {
@@ -22,7 +22,7 @@ public class Day1 {
         return count;
     }
 
-    private static int Solve2(List<Integer> l) {
+    private static int solve2(List<Integer> l) {
         int prev = 0;
         int count = 0;
         for (int i = 0; i < l.size()-2; i++) {

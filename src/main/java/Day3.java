@@ -1,16 +1,15 @@
 import util.FileUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Day3 {
     public static void main(String[] args) {
-        var in = FileUtil.Read("input/day3.txt");
-        System.out.println(Solve1(in));
-        System.out.println(Solve2(in));
+        var in = FileUtil.read("input/day3.txt");
+        System.out.println(solve1(in));
+        System.out.println(solve2(in));
     }
 
-    private static int Solve1(List<String> l) {
+    private static int solve1(List<String> l) {
         int len = l.get(0).length();
         var gamma = "";
         var epsilon = "";
@@ -22,7 +21,7 @@ public class Day3 {
         return Integer.parseInt(gamma, 2) * Integer.parseInt(epsilon, 2);
     }
 
-    private static int Solve2(List<String> l) {
+    private static int solve2(List<String> l) {
         return ogr(l) * oc2(l);
     }
 

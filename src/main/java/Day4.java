@@ -15,7 +15,7 @@ public class Day4 {
         }
     }
     private record Board(Cell[][] cells) {
-        private int Score() {
+        private int score() {
             int score = 0;
             for (int i=0; i<5;i++) {
                 for (int j=0; j<5; j++) {
@@ -26,7 +26,7 @@ public class Day4 {
             return score;
         }
 
-        private boolean Bingo() {
+        private boolean bingo() {
             for (int i=0;i<5;i++) {
                 if (cells[i][0].marked &&
                         cells[i][1].marked &&
@@ -42,7 +42,7 @@ public class Day4 {
             return false;
         }
 
-        private void Mark(int num) {
+        private void mark(int num) {
             for (int i=0;i<5;i++) {
                 for (int j=0;j<5;j++) {
                     if (cells[i][j].num == num) cells[i][j].marked = true;
@@ -52,20 +52,20 @@ public class Day4 {
     }
 
     public static void main(String[] args) {
-        var in = FileUtil.ReadBlocks("input/day4.txt");
-        System.out.println(Solve1(in));
-        System.out.println(Solve2(in));
+        var in = FileUtil.readBlocks("input/day4.txt");
+        System.out.println(solve1(in));
+        System.out.println(solve2(in));
     }
 
-    private static int Solve1(List<List<String>> ll) {
-        var lottoRad = Util.Ints(ll.get(0).get(0));
+    private static int solve1(List<List<String>> ll) {
+        var lottoRad = Util.ints(ll.get(0).get(0));
         var boards = parseBoards(ll);
 
         for (int n : lottoRad) {
             for (Board b : boards) {
-                b.Mark(n);
-                if (b.Bingo()) {
-                    return b.Score() * n;
+                b.mark(n);
+                if (b.bingo()) {
+                    return b.score() * n;
                 }
             }
         }
@@ -73,17 +73,17 @@ public class Day4 {
         throw new RuntimeException("No solution found");
     }
 
-    private static int Solve2(List<List<String>> ll) {
-        var lottoRad = Util.Ints(ll.get(0).get(0));
+    private static int solve2(List<List<String>> ll) {
+        var lottoRad = Util.ints(ll.get(0).get(0));
         var boards = parseBoards(ll);
 
         for (int n : lottoRad) {
             var it = boards.iterator();
             while (it.hasNext()) {
                 Board b = it.next();
-                b.Mark(n);
-                if (b.Bingo()) {
-                    if (boards.size() == 1) return b.Score() * n;
+                b.mark(n);
+                if (b.bingo()) {
+                    if (boards.size() == 1) return b.score() * n;
                     it.remove();
                 }
             }
@@ -102,7 +102,7 @@ public class Day4 {
 
             // row
             for (int j=0;j<5;j++) {
-                var row = Util.Ints(l.get(j));
+                var row = Util.ints(l.get(j));
                 for (int k=0;k<5;k++) {
                     cells[j][k] = new Cell(row.get(k));
                 }

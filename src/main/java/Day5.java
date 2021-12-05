@@ -1,3 +1,4 @@
+import util.Direction;
 import util.FileUtil;
 import util.Position;
 import util.Util;
@@ -54,13 +55,17 @@ public class Day5 {
                     .forEach(n -> list.add(new Position(n, p1.y())));
         }
         else if (allowDiagonal) {
-            if (p2.y() > p1.y() && p2.x() > p1.x()) {
-                System.out.println("SE");
+            var np = p1;
+            while (np.x() != p2.x() && np.y() != p2.y()) {
+                // down/up?
+                if (p2.y() > p1.y()) np = np.move(Direction.UP); // Actually down
+                if (p2.y() < p1.y()) np = np.move(Direction.DOWN); // Actually up
+                // left/right?
+                if (p2.x() > p1.x()) np = np.move(Direction.RIGHT);
+                if (p2.x() < p1.x()) np = np.move(Direction.LEFT);
 
+                list.add(np);
             }
-            if (p2.y() > p1.y() && p2.x() < p1.x()) System.out.println("SW");
-            if (p2.y() < p1.y() && p2.x() > p1.x()) System.out.println("NE");
-            if (p2.y() < p1.y() && p2.x() < p1.x()) System.out.println("NW");
         }
 
         return list;

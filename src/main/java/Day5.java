@@ -26,9 +26,6 @@ public class Day5 {
     private static long solve(List<String> l, boolean part2) {
         var map = new HashMap<Position, Integer>();
 
-        var li = line(new Position(1,1), new Position(3,3),true);
-        var li2 = line(new Position(9,7), new Position(7,9),true);
-
         for (String s : l) {
             var points = Util.ints(s);
             var p1 = new Position(points.get(0), points.get(1));
@@ -55,12 +52,11 @@ public class Day5 {
                     .forEach(n -> list.add(new Position(n, p1.y())));
         }
         else if (allowDiagonal) {
+            list.add(p1);
             var np = p1;
             while (np.x() != p2.x() && np.y() != p2.y()) {
-                // down/up?
-                if (p2.y() > p1.y()) np = np.move(Direction.UP); // Actually down
-                if (p2.y() < p1.y()) np = np.move(Direction.DOWN); // Actually up
-                // left/right?
+                if (p2.y() > p1.y()) np = np.move(Direction.UP);
+                if (p2.y() < p1.y()) np = np.move(Direction.DOWN);
                 if (p2.x() > p1.x()) np = np.move(Direction.RIGHT);
                 if (p2.x() < p1.x()) np = np.move(Direction.LEFT);
 

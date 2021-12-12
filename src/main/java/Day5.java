@@ -55,8 +55,8 @@ public class Day5 {
             list.add(p1);
             var np = p1;
             while (np.x() != p2.x() && np.y() != p2.y()) {
-                if (p2.y() > p1.y()) np = np.move(Direction.UP);
-                if (p2.y() < p1.y()) np = np.move(Direction.DOWN);
+                if (p2.y() > p1.y()) np = np.move(Direction.DOWN);
+                if (p2.y() < p1.y()) np = np.move(Direction.UP);
                 if (p2.x() > p1.x()) np = np.move(Direction.RIGHT);
                 if (p2.x() < p1.x()) np = np.move(Direction.LEFT);
 

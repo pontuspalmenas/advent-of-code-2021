@@ -9,7 +9,7 @@ class GridTest {
     @Test
     void setAndGet() {
         var g = grid2x2();
-        assertEquals(1+3+5+7, g.get(0,0)+g.get(0,1)+g.get(1,0)+g.get(1,1));
+        assertEquals(1+3+5+7, g.getV(0,0)+g.getV(0,1)+g.getV(1,0)+g.getV(1,1));
     }
 
     @Test

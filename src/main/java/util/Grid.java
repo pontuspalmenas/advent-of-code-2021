@@ -34,7 +34,11 @@ public class Grid<T> {
         tiles.add(new Tile<>(x, y, value));
     }
 
-    public T get(int x, int y) {
+    public Tile<T> get(int x, int y) {
+        return tiles.stream().filter(p -> p.x == x && p.y == y).findFirst().orElseThrow();
+    }
+
+    public T getV(int x, int y) {
         final Optional<Tile<T>> tO = tiles.stream().filter(p -> p.x == x && p.y == y).findFirst();
         if (tO.isEmpty()) throw new RuntimeException("Out of bounds");
         return tO.get().value();

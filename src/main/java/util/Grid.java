@@ -1,9 +1,12 @@
 package util;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /*
    -------------------
@@ -16,7 +19,7 @@ import java.util.stream.Collectors;
  */
 
 public class Grid<T> {
-    record Tile<T>(int x, int y, T value) {
+    public record Tile<T>(int x, int y, T value) {
     }
 
     private final int width, height;
@@ -29,8 +32,17 @@ public class Grid<T> {
         this.tiles = new HashSet<>(w*h);
     }
 
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
     public void set(int x, int y, T value) {
         if (x < 0 || x > width || y < 0 || y > height) throw new RuntimeException("Out of bounds");
+        if (find(x,y).isPresent()) tiles.removeIf(p -> p.x == x && p.y == y);
         tiles.add(new Tile<>(x, y, value));
     }
 
@@ -44,8 +56,17 @@ public class Grid<T> {
         return tO.get().value();
     }
 
+    // todo: rename getO?
     public Optional<Tile<T>> find(int x, int y) {
         return tiles.stream().filter(p -> p.x == x && p.y == y).findFirst();
+    }
+
+    public Stream<Tile<T>> find(Predicate<Tile<T>> p) {
+        return tiles.stream().filter(p);
+    }
+
+    public Stream<Tile<T>> stream() {
+        return tiles.stream();
     }
 
     // todo: return .value() instead of Tile

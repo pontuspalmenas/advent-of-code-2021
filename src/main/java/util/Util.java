@@ -43,5 +43,19 @@ public class Util {
         return out;
     }
 
+    public static Grid<Integer> parseIntGrid(List<String> l) {
+        final int h = l.size();
+        final int w = l.get(0).length();
+        var g = new Grid<Integer>(w, h);
+
+        for (int y=0; y<h; y++) {
+            for (int x=0; x<w; x++) {
+                g.set(x,y,Character.getNumericValue(l.get(y).charAt(x)));
+            }
+        }
+
+        return g;
+    }
+
     // RegexAll returns all submatches, skipping the full match
 }

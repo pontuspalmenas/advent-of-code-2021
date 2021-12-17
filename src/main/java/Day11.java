@@ -1,5 +1,4 @@
 import util.FileUtil;
-import util.Grid;
 import util.Position;
 import util.Util;
 
@@ -13,50 +12,36 @@ public class Day11 {
         System.out.println(solve1(g));
     }
 
-    private static int solve1(Grid<Integer> g) {
+    private static int solve1(int[][] grid) {
         int flashes = 0;
-        for (int step=0; step<2; step++) {
-            //g.stream().forEach(t -> g.set(t.x(), t.y(), t.value()+1)); // ConcurrentModificationException :(
+        debug(grid);
 
-            // increase all
-            for (int y=0;y<g.getHeight();y++) {
-                for (int x = 0; x < g.getWidth(); x++) {
-                    g.set(x, y, g.getV(x, y) + 1);
-                }
-            }
+        for (int step=0;step<1;step++) {
+            var willFlash = new HashSet<>(shouldFlash(grid));
+            
 
-            // handled flashed
-            var hasFlashed = new HashSet<Position>();
-            var willFlash = new HashSet<>(g.find(p -> p.value() > 9).toList());
             while (!willFlash.isEmpty()) {
-                for (var t : willFlash) {
-                    g.set(t.x(), t.y(), 0); // reset
-                    hasFlashed.add(new Position(t.x(), t.y()));
-                    // increase neighbors
-                    var ns = g.neighbors(t.x(), t.y());
-                    for (var tt : ns) {
-                        if (!hasFlashed.contains(new Position(tt.x(), tt.y()))) {
-                            g.set(tt.x(), tt.y(), g.getV(tt.x(), tt.y()) + 1);
-                            willFlash.addAll(g.find(p -> p.value() > 9).toList());
-                        }
-                    }
-                    flashes++;
-                }
-                willFlash.removeIf(p -> hasFlashed.contains(new Position(p.x(), p.y())));
+
             }
-
-            System.out.println("Step " + step);
-            debug(g);
         }
-
 
         return flashes;
     }
 
-    private static void debug(Grid<Integer> g) {
-        for (int y=0;y<g.getHeight();y++) {
-            for (int x = 0; x < g.getWidth(); x++) {
-                System.out.print(g.getV(x,y));
+    private static Set<Position> shouldFlash(int[][] g) {
+        var s = new HashSet<Position>();
+        for (int y=0;y<g.length;y++) {
+            for (int x=0; x<g[0].length; x++) {
+                if (g[y][x] > 9) s.add(new Position(x,y));
+            }
+        }
+        return s;
+    }
+
+    private static void debug(int[][] g) {
+        for (int y=0;y<g.length;y++) {
+            for (int x=0; x<g[0].length; x++) {
+                System.out.print(g[y][x]);
             }
             System.out.println("");
         }

@@ -25,4 +25,16 @@ class Day16Test {
         var p = new Day16.Packet("110100101111111000101000");
         assertEquals(2021, p.value());
     }
+
+    @Test
+    void lengthTypeID() {
+        var p = Day16.Packet.fromHex("38006F45291200");
+        assertEquals(0, p.lengthTypeID());
+    }
+
+    @Test
+    void subPacketsLength() {
+        var p = Day16.Packet.fromHex("38006F45291200");
+        assertEquals(27, p.subPacketsLength());
+    }
 }

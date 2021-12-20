@@ -9,15 +9,14 @@ public class Day20 {
         System.out.println(solve1(in.get(0).get(0), in.get(1)));
     }
 
-    record Image(Set<Position> data, int size) { }
+    record Image(boolean[][] data) { }
 
     private static int solve1(String algo, List<String> l) {
         var image = image(l);
         var alg = algo(algo);
         debug(image);
-        final int pos = lookup(new Position(2, 2), image);
-        System.out.println(pos);
-        System.out.println(alg.contains(pos) ? "#" : ".");
+        //image = enhance(alg, image);
+        //debug(image);
 
         return -1;
     }
@@ -31,46 +30,45 @@ public class Day20 {
     }
 
     private static Image image(List<String> l) {
-        var data = new HashSet<Position>();
+        var data = new boolean[104][104];
         final int h = l.size();
         final int w = l.get(0).length();
         for (int y = 0; y< h; y++) {
             for (int x=0;x<w;x++) {
-                if (l.get(y).charAt(x) == '#') data.add(new Position(x, y));
+                data[y][x] = (l.get(y).charAt(x) == '#');
             }
         }
-        return new Image(data, h);
+        return new Image(data);
     }
 
     private static void debug(Image i) {
-        for (int y = 0; y < i.size; y++) {
-            for (int x = 0; x < i.size; x++) {
-                if (i.data.contains(new Position(x,y))) System.out.print("#");
-                else System.out.print(".");
+        for (int y = 0; y < i.data.length; y++) {
+            for (int x = 0; x < i.data.length; x++) {
+                System.out.print(i.data[y][x] ? "#" : ".");
             }
             System.out.println();
         }
     }
 
     private static Image enhance(Set<Integer> algo, Image i) {
-        var data = new HashSet<Position>();
-        for (int y = 0; y < i.size; y++) {
-            for (int x = 0; x < i.size; x++) {
+        final int len = i.data.length;
+        var data = new boolean[104][104];
+        for (int y = 0; y < 104; y++) {
+            for (int x = 0; x < 104; x++) {
                 final Position p = new Position(x, y);
-                if (algo.contains(lookup(p, i))) data.add(p);
+                data[y][x] = algo.contains(algoPos(p, i));
             }
         }
 
-        return null;
+        return new Image(data);
     }
 
     // Returns the position in the algo given a position in the image
-    private static int lookup(Position p, Image image) {
+    private static int algoPos(Position p, Image image) {
         var bits = "";
         for (int i=-1; i<=1; i++) {
             for (int j = -1; j <= 1; j++) {
-                var np = new Position(p.x() + j, p.y() + i);
-                bits += image.data.contains(np) ? "1" : "0";
+                bits += image.data[p.y()+i][p.x()+j] ? "1" : "0";
             }
         }
         return Integer.parseInt(bits, 2);

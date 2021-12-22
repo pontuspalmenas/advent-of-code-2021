@@ -1,39 +1,34 @@
 import util.FileUtil;
+import util.Position;
 import util.Util;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class Day15 {
-    class MazeSolver {
-        private int[][] grid;
-        private int height;
-        private int width;
-
-        private int[][] map;
-
-        MazeSolver(int[][] grid) {
-            this.grid = grid;
-            this.height = grid.length;
-            this.width = grid[0].length;
-
-            map = new int[height][width];
-        }
-
-        private boolean solve() {
-            
-        }
-    }
-
     public static void main(String[] args) {
         var in = FileUtil.read("input/day15.txt");
-        var grid = Util.parseIntGrid(in);
-        System.out.println(solve1(grid));
+        System.out.println(solve1(in));
     }
 
-    private static int solve1(int[][] grid) {
-        Util.debug(grid);
-
-        return -1;
+    private static int solve1(List<String> l) {
+        grid = Util.parseIntGrid(l);
+        cache = new HashMap<>();
+        return solve(0,0)-grid[0][0];
     }
 
-    private static
+    private static int[][] grid;
+    private static Map<Position, Integer> cache;
+
+    private static int solve(int y, int x) {
+        var p = new Position(x, y);
+        if (cache.containsKey(p)) return cache.get(p);
+        if (y<0||y>=grid.length||x<0||x>=grid[0].length) return Integer.MAX_VALUE;
+        if (y==grid.length-1&&x==grid[0].length-1) return grid[y][x];
+        var cost = grid[y][x] + Math.min(solve(y+1, x), solve(y,x+1));
+        cache.put(p, cost);
+        return cost;
+    }
 
 }

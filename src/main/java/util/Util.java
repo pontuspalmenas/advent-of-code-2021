@@ -75,6 +75,15 @@ public class Util {
         return ns;
     }
 
+    public static void debug(int[][] grid) {
+        for (int y=0; y<grid.length; y++) {
+            for (int x=0; x<grid[y].length; x++) {
+                System.out.print(grid[y][x]);
+            }
+            System.out.println();
+        }
+    }
+
     public static int h(int[][] grid) {
         return grid.length;
     }

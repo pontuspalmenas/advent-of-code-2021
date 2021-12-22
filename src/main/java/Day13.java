@@ -10,27 +10,26 @@ public class Day13 {
     public static void main(String[] args) {
         var in = FileUtil.readBlocks("input/day13.txt");
         System.out.println(solve1(in));
+        solve2(in);
     }
 
     private static int solve1(List<List<String>> ll) {
         var paper = paper(ll.get(0));
-        var folds = ll.get(1).stream().map(s -> s.split(" ")[2]).toList();
-
-        debug(paper);
-        System.out.println("FOLDED:");
-        debug(fold(paper, "y=7"));
-
-        /*for (String f : folds) {
-            paper = fold(paper, f);
-
-            debug(paper);
-        }*/
-
+        var fold = ll.get(1).get(0).split(" ")[2];
+        paper = fold(paper, fold);
         return paper.size();
     }
 
+    private static void solve2(List<List<String>> ll) {
+        var paper = paper(ll.get(0));
+        var folds = ll.get(1).stream().map(s -> s.split(" ")[2]).toList();
 
-    // todo: vi kan inte använda naivt set, vi behöver hålla kolla på tomma rader också
+        for (String f : folds) {
+            paper = fold(paper, f);
+        }
+        debug(paper);
+    }
+
     private static Set<Position> paper(List<String> l) {
         return l.stream().map(t -> {
                     var ss = t.split(",");
@@ -61,17 +60,19 @@ public class Day13 {
         // first add all points from the first half of the original paper
         var folded = new HashSet<>(paper.stream().filter(p -> p.y() < at).toList());
 
-        int w = paper.stream().mapToInt(Position::x).max().orElseThrow();
-
         // now add all other points but inverted y
-        //folded.addAll(paper.stream().filter(p -> p.y() > at).map(p -> new Position(p.x(), p.y()-at)).toList());
+        folded.addAll(paper.stream().filter(p -> p.y() > at).map(p -> new Position(p.x(), at-(p.y()-at))).toList());
 
         return folded;
     }
 
     private static Set<Position> foldX(Set<Position> paper, int at) {
-        var set = new HashSet<Position>(); // kopiera det gamla?
+        // first add all points from the first half of the original paper
+        var folded = new HashSet<>(paper.stream().filter(p -> p.x() < at).toList());
 
-        return set;
+        // now add all other points but inverted y
+        folded.addAll(paper.stream().filter(p -> p.x() > at).map(p -> new Position(at-(p.x()-at), p.y())).toList());
+
+        return folded;
     }
 }

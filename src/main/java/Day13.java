@@ -17,10 +17,20 @@ public class Day13 {
         var folds = ll.get(1).stream().map(s -> s.split(" ")[2]).toList();
 
         debug(paper);
+        System.out.println("FOLDED:");
+        debug(fold(paper, "y=7"));
 
-        return -1;
+        /*for (String f : folds) {
+            paper = fold(paper, f);
+
+            debug(paper);
+        }*/
+
+        return paper.size();
     }
 
+
+    // todo: vi kan inte använda naivt set, vi behöver hålla kolla på tomma rader också
     private static Set<Position> paper(List<String> l) {
         return l.stream().map(t -> {
                     var ss = t.split(",");
@@ -41,7 +51,25 @@ public class Day13 {
         }
     }
 
-    private static Set<Position> fold(Set<Position> paper) {
+    private static Set<Position> fold(Set<Position> paper, String how) {
+        var s = how.split("=");
+        var n = Integer.parseInt(s[1]);
+        return s[0].equals("y") ? foldY(paper, n) : foldX(paper, n);
+    }
+
+    private static Set<Position> foldY(Set<Position> paper, int at) {
+        // first add all points from the first half of the original paper
+        var folded = new HashSet<>(paper.stream().filter(p -> p.y() < at).toList());
+
+        int w = paper.stream().mapToInt(Position::x).max().orElseThrow();
+
+        // now add all other points but inverted y
+        //folded.addAll(paper.stream().filter(p -> p.y() > at).map(p -> new Position(p.x(), p.y()-at)).toList());
+
+        return folded;
+    }
+
+    private static Set<Position> foldX(Set<Position> paper, int at) {
         var set = new HashSet<Position>(); // kopiera det gamla?
 
         return set;

@@ -1,16 +1,14 @@
 import util.FileUtil;
+import util.GridUtil;
 import util.Position;
-import util.Util;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.IntStream;
 
 public class Day11 {
     public static void main(String[] args) {
         var in = FileUtil.read("input/day11.txt");
-        System.out.println(solve1(Util.parseIntGrid(in)));
-        System.out.println(solve2(Util.parseIntGrid(in)));
+        System.out.println(solve1(GridUtil.parseIntGrid(in)));
+        System.out.println(solve2(GridUtil.parseIntGrid(in)));
     }
 
     private static int solve1(int[][] grid) {
@@ -32,7 +30,7 @@ public class Day11 {
                 grid[p.y()][p.x()] = 0;
                 flashes++;
 
-                for (var np : Util.neighbors(p.y(),p.x(), grid)) {
+                for (var np : GridUtil.diagAdjacent(p.y(),p.x(), grid)) {
                     if (grid[np.y()][np.x()]==0) continue;
                     grid[np.y()][np.x()]++;
                     if (grid[np.y()][np.x()] > 9) flash.add(np);
@@ -62,7 +60,7 @@ public class Day11 {
                 grid[p.y()][p.x()] = 0;
                 flashes++;
 
-                for (var np : Util.neighbors(p.y(),p.x(), grid)) {
+                for (var np : GridUtil.diagAdjacent(p.y(),p.x(), grid)) {
                     if (grid[np.y()][np.x()]==0) continue;
                     grid[np.y()][np.x()]++;
                     if (grid[np.y()][np.x()] > 9) flash.add(np);

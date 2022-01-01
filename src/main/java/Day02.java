@@ -2,7 +2,7 @@ import util.FileUtil;
 
 import java.util.List;
 
-public class Day2 {
+public class Day02 {
     public static void main(String[] args) {
         var in = FileUtil.read("input/day2.txt");
         System.out.println(solve1(in));

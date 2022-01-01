@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class Day5 {
+public class Day05 {
     public static void main(String[] args) {
         var in = FileUtil.read("input/day5.txt");
         System.out.println(solve1(in));

@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Day4 {
+public class Day04 {
     private static class Cell {
         private final int num;
         private boolean marked;

@@ -3,7 +3,7 @@ import util.Util;
 
 import java.util.List;
 
-public class Day1 {
+public class Day01 {
     public static void main(String[] args) {
         var in = Util.ints(FileUtil.read("input/day1.txt"));
         System.out.println(solve1(in));

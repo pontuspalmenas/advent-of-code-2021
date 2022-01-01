@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// Smoke Basin
 public class Day09 {
     public static void main(String[] args) {
         var in = FileUtil.read("input/day9.txt");

@@ -2,6 +2,7 @@ import util.FileUtil;
 
 import java.util.*;
 
+// Seven Segment Search
 public class Day08 {
     public static void main(String[] args) {
         var in = FileUtil.read("input/day8.txt");

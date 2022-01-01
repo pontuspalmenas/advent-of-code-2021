@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+// Extended Polymerization
 public class Day14 {
     public static void main(String[] args) {
         var in = FileUtil.read("input/day14.txt");

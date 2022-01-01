@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+// Giant Squid
 public class Day04 {
     private static class Cell {
         private final int num;

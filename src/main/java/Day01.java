@@ -3,6 +3,7 @@ import util.Util;
 
 import java.util.List;
 
+// Sonar Sweep
 public class Day01 {
     public static void main(String[] args) {
         var in = Util.ints(FileUtil.read("input/day1.txt"));

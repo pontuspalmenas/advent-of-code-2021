@@ -3,6 +3,7 @@ import util.Util;
 
 import java.util.List;
 
+// The Treachery of Whales
 public class Day07 {
     public static void main(String[] args) {
         var in = Util.ints(FileUtil.read("input/day7.txt"));

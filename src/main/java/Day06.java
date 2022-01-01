@@ -4,8 +4,8 @@ import util.Util;
 import java.util.Arrays;
 import java.util.List;
 
+// Lanternfish
 public class Day06 {
-
     public static void main(String[] args) {
         var in = Util.ints(FileUtil.read("input/day6.txt"));
         System.out.println(solve1(in));

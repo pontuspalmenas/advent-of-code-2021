@@ -2,6 +2,7 @@ import util.FileUtil;
 
 import java.util.*;
 
+// Syntax Scoring
 public class Day10 {
     public static void main(String[] args) {
         var in = FileUtil.read("input/day10.txt");

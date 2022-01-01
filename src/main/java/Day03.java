@@ -2,6 +2,7 @@ import util.FileUtil;
 
 import java.util.List;
 
+// Binary Diagnostic
 public class Day03 {
     public static void main(String[] args) {
         var in = FileUtil.read("input/day3.txt");

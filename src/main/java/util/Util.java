@@ -34,6 +34,10 @@ public class Util {
          return l.stream().mapToInt(v -> v).sum();
     }
 
+    public static int product(List<Integer> l) {
+        return l.stream().reduce(1, (a,b) -> a*b);
+    }
+
     // Regex returns all matches, skipping the full match
     public static List<String> regex(String r, String s) {
         var out = new ArrayList<String>();

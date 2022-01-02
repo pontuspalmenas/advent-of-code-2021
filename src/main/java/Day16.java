@@ -6,43 +6,72 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Day16 {
-    record Packet(int version, int type, List<Long> values) {}
     record ParseResult(int value, int offset) {} // value of current packet, offset to next packet
 
     public static void main(String[] args) {
         var in = FileUtil.read("input/day16.txt").get(0);
         System.out.println(solve1(in));
+        System.out.println(solve2(in));
     }
 
     private static int solve1(String s) {
-        return parse(hex2bin(s), -1);
+        //return parse(hex2bin(s), -1);
+        return -1;
     }
 
-    private static int parse(String s, int count) {
-        if (s.length() == 0 || !s.contains("1")) return 0;
-        if (count == 0) return parse(s, -1);
+    private static int solve2(String s) {
+        return parse(hex2bin(s), 0, -1).value;
+    }
 
-        int ver = dec(s.substring(0,3));
-        int tid = dec(s.substring(3,6));
+    private final static ParseResult None = new ParseResult(0, -1);
 
-        if (tid == 4) {
-            int i = 6;
+    private static int offset = 0;
+    private static ParseResult parse(String data, int offset, int end) {
+        if (offset == end) return None;
+        if (offset > data.length()-4) return None;
+
+        int typeId = dec(data.substring(offset+3,offset+6));
+
+        if (typeId == 4) {
+            offset += 6;
+            var bin = "";
             boolean done = false;
             while (!done) {
-                if (s.charAt(i) == '0') done = true;
-                i += 5;
+                if (data.charAt(offset)=='0') done = true;
+                bin += data.substring(offset+1,offset+5);
+                offset += 5;
             }
-            return ver + parse(s.substring(i), count-1);
+            return new ParseResult(dec(bin), offset);
         }
 
-        // handle operator
+        var values = new ArrayList<Integer>();
+        int nextOffset = -1;
 
-        if (s.charAt(6) == '0') { // packet length in bits
-            var len = dec(s.substring(7,22));
-            return ver + parse(s.substring(22, 22+len), -1) + parse(s.substring(22+len), count-1);
+        if (data.charAt(offset+6)=='0') { // packet length in bits
+            int len = dec(data.substring(offset+7,offset+22));
+            int subOffset = offset+22;
+            int prevOffset;
+            while (true) {
+                prevOffset = offset;
+                var sub = parse(data, subOffset, subOffset+len);
+                if (sub.offset == -1) break;
+                subOffset = sub.offset;
+                values.add(sub.value);
+            }
+            nextOffset = prevOffset;
         } else { // number of packets
-            return ver + parse(s.substring(18), dec(s.substring(7,18)));
+            int subPacksLeft = dec(data.substring(offset+7,offset+18));
+            int subOffset = offset+18;
+            while (subPacksLeft > 0) {
+                var sub = parse(data, subOffset, -1);
+                subPacksLeft--;
+                values.add(sub.value);
+                nextOffset = subOffset;
+            }
         }
+
+        int result = operate(typeId, values);
+        return new ParseResult(result, nextOffset);
     }
 
     private static int operate(int typeId, List<Integer> values) {

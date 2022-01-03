@@ -22,20 +22,20 @@ public class Util {
         return out;
     }
 
-    public static int min(List<Integer> l) {
-        return l.stream().mapToInt(v -> v).min().orElseThrow(RuntimeException::new);
+    public static long min(List<Long> l) {
+        return l.stream().mapToLong(v -> v).min().orElseThrow(RuntimeException::new);
     }
 
-    public static int max(List<Integer> l) {
-        return l.stream().mapToInt(v -> v).max().orElseThrow(RuntimeException::new);
+    public static long max(List<Long> l) {
+        return l.stream().mapToLong(v -> v).max().orElseThrow(RuntimeException::new);
     }
 
-    public static int sum(List<Integer> l) {
-         return l.stream().mapToInt(v -> v).sum();
+    public static long sum(List<Long> l) {
+         return l.stream().mapToLong(v -> v).sum();
     }
 
-    public static int product(List<Integer> l) {
-        return l.stream().reduce(1, (a,b) -> a*b);
+    public static long product(List<Long> l) {
+        return l.stream().reduce(1L, (a,b) -> a*b);
     }
 
     // Regex returns all matches, skipping the full match

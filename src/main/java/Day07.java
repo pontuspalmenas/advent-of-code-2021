@@ -21,7 +21,7 @@ public class Day07 {
 
     private static long solve(List<Integer> l, boolean part2) {
         int min = Integer.MAX_VALUE;
-        for (int i=0; i<Util.max(l);i++) {
+        for (int i=0; i<Util.max(l.stream().mapToLong(v->v).boxed().toList());i++) {
             int cost = 0;
             for (int n : l) {
                 int dist = Math.abs(n - i);

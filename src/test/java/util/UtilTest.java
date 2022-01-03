@@ -28,17 +28,17 @@ class UtilTest {
 
     @Test
     void minOfListInts() {
-        assertEquals(-444, Util.min(Arrays.asList(123,-444,555,1)));
+        assertEquals(-444, Util.min(Arrays.asList(123L,-444L,555L,1L)));
     }
 
     @Test
     void maxOfListInts() {
-        assertEquals(555, Util.max(Arrays.asList(123,-444,555,1)));
+        assertEquals(555, Util.max(Arrays.asList(123L,-444L,555L,1L)));
     }
 
     @Test
     void sumOfListInts() {
-        assertEquals(2, Util.sum(Arrays.asList(1,2,3,-4)));
+        assertEquals(2, Util.sum(Arrays.asList(1L,2L,3L,-4L)));
     }
 
     @Test

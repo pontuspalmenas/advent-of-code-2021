@@ -31,6 +31,7 @@ public class Day08 {
     }
 
     /*
+    lengths:
         0 -> 6
         1 -> 2
         2 -> 5
@@ -50,60 +51,68 @@ public class Day08 {
         // 8 -> 7
         var knownLengths = Map.of(2,1,4,4,3,7,7,8);
 
-        var keys = new HashMap<String, Integer>();
-        var reverse = new HashMap<Integer, String>();
-        var unmapped = new HashSet<>(inputs);
+        var mapper = new Mapper();
 
         // First map all keys of known length
         for (int len : knownLengths.keySet()) {
             int val = knownLengths.get(len);
-            String key = unmapped.stream().filter(s -> s.length() == len).findFirst().orElseThrow();
-            keys.put(key, val);
-            reverse.put(val, key);
-            unmapped.remove(key);
+            String key = inputs.stream().filter(s -> s.length() == len).findFirst().orElseThrow();
+            mapper.add(key, val);
         }
-
+        
         // Deduce the rest
-        while (true) {
-            if (unmapped.isEmpty()) break;
-        }
-
-        return keys;
-    }
-
-    private static String deduceNext(Set<String> unmapped, Map<Integer, String> reverse) {
-        return "";
-    }
-
-    private static boolean containsAnyPermutation(String s) {
-        for (String p : permute(s)) {
-            if (s.contains(p)) return true;
-        }
-
-        return false;
-    }
-
-    public static Set<String> permute(String str) {
-        Set<String> set = new HashSet<String>();
-
-        // check if string is null
-        if (str == null) {
-            return null;
-        } else if (str.length() == 0) {
-            set.add("");
-            return set;
-        }
-
-        char first = str.charAt(0);
-        String sub = str.substring(1);
-
-        Set<String> words = permute(sub);
-
-        for (String strNew : words) {
-            for (int i = 0;i<=strNew.length();i++){
-                set.add(strNew.substring(0, i) + first + strNew.substring(i));
+        for (String s : inputs) {
+            if (mapper.mapped(s)) continue;
+            int len = s.length();
+            if (len == 6) {
+                if (!contains(s,1,mapper)) {
+                    mapper.add(s,6);
+                } else if (contains(s,4,mapper)) {
+                    mapper.add(s,9);
+                } else {
+                    mapper.add(s,0);
+                }
+            }
+            if (len == 5) { // candidates 2,3,5
+                if (s.contains(mapper.get(1))) { // 3 contains 1
+                    mapper.add(s, 3);
+                }
             }
         }
-        return set;
+
+        debug(mapper);
+
+        return mapper.keys();
+    }
+
+    private static void debug(Mapper mapper) {
+        for (String s : mapper.keys.keySet()) {
+            System.out.printf("%s: %s\n", s, mapper.get(s));
+        }
+    }
+
+    private static boolean contains(String s, int n, Mapper m) {
+        return s.contains(m.get(n));
+    }
+
+    static class Mapper {
+        private final HashMap<String, Integer> keys = new HashMap<>();
+        private final HashMap<Integer, String> rev = new HashMap<>();
+        void add(String s, int val) {
+            keys.put(s, val);
+            rev.put(val, s);
+        }
+        int get(String s) {
+            return keys.get(s);
+        }
+        boolean mapped(String s) {
+            return keys.containsKey(s);
+        }
+        String get(int n) {
+            return rev.get(n);
+        }
+        Map<String, Integer> keys() {
+            return keys;
+        }
     }
 }

@@ -21,30 +21,23 @@ public class Day08 {
     private static long solve2(List<String> l) {
         for (String s : l) {
             var inputs = Set.copyOf(Arrays.stream(s.split("\\|")[0].split(" ")).toList());
-            var outputs = s.split("\\|")[1];
+
+            var outputs = Arrays.stream(s.split("\\|")[1].split(" ")).toList();
 
             var keys = keys(inputs);
+
+            for (String o : outputs) {
+                System.out.printf("%s: %d\n", o, keys.get(set(o)));
+            }
+
             var x = 0;
         }
 
         throw new RuntimeException("Not Yet Implemented");
     }
 
-    /*
-    lengths:
-        0 -> 6
-        1 -> 2
-        2 -> 5
-        3 -> 5
-        4 -> 4
-        5 -> 5
-        6 -> 6
-        7 -> 3
-        8 -> 7
-        9 -> 6
-     */
 
-    private static Map<String, Integer> keys(Set<String> inputs) {
+    private static Map<Set<Character>, Integer> keys(Set<String> inputs) {
         // 1 -> 2
         // 4 -> 4
         // 7 -> 3
@@ -57,29 +50,30 @@ public class Day08 {
         for (int len : knownLengths.keySet()) {
             int val = knownLengths.get(len);
             String key = inputs.stream().filter(s -> s.length() == len).findFirst().orElseThrow();
-            mapper.add(key, val);
+            mapper.add(set(key), val);
         }
 
         // Deduce the rest
         for (String s : inputs) {
-            if (mapper.mapped(s)) continue;
-            int len = s.length();
-            if (len == 6) {
-                if (!contains(s,1,mapper)) {
-                    mapper.add(s,6);
-                } else if (contains(s,4,mapper)) {
-                    mapper.add(s,9);
+            var set = set(s);
+            if (mapper.mapped(set)) continue;
+            int len = set.size();
+            if (len == 6) { // candidates 6,9,0
+                if (!contains(set,1,mapper)) {
+                    mapper.add(set,6);
+                } else if (contains(set,4,mapper)) {
+                    mapper.add(set,9);
                 } else {
-                    mapper.add(s,0);
+                    mapper.add(set,0);
                 }
             }
             if (len == 5) { // candidates 2,3,5
-                if (containedIn(s,6,mapper)) { // 5 contained in 6
-                    mapper.add(s, 5);
-                } else if (containedIn(s,9,mapper) && contains(s,1,mapper)) {
-                    mapper.add(s, 3);
+                if (containedIn(set,6,mapper)) {
+                    mapper.add(set, 5);
+                } else if (containedIn(set,9,mapper) && contains(set,1,mapper)) {
+                    mapper.add(set, 3);
                 } else {
-                    mapper.add(s, 2);
+                    mapper.add(set, 2);
                 }
             }
         }
@@ -89,56 +83,46 @@ public class Day08 {
         return mapper.keys();
     }
 
-    private static void debug(Mapper mapper) {
-        for (String s : mapper.keys.keySet()) {
-            System.out.printf("%s: %s\n", s, mapper.get(s));
-        }
-    }
-
-    private static boolean contains(String s, int n, Mapper m) {
-        var l = charset(s, n, m);
-        return l.get(0).containsAll(l.get(1));
-    }
-
-    private static boolean containedIn(String s, int n, Mapper m) {
-        var l = charset(s, n, m);
-        return l.get(1).containsAll(l.get(0));
-    }
-
-    private static List<Set<Character>> charset(String s, int n, Mapper m) {
+    private static Set<Character> set(String s) {
         Set<Character> set = new HashSet<>();
         for (char c : s.toCharArray()) {
             set.add(c);
         }
-        Set<Character> set2 = new HashSet<>();
-        if (m.get(n) != null) {
-            for (char c : m.get(n).toCharArray()) {
-                set2.add(c);
-            }
+        return set;
+    }
+
+    private static void debug(Mapper mapper) {
+        for (var s : mapper.keys.keySet()) {
+            System.out.printf("%s: %s\n", s, mapper.get(s));
         }
-        var l = new ArrayList<Set<Character>>();
-        l.add(set);
-        l.add(set2);
-        return l;
+    }
+
+    private static boolean contains(Set<Character> set, int n, Mapper m) {
+        return set.containsAll(m.get(n));
+    }
+
+    private static boolean containedIn(Set<Character> set, int n, Mapper m) {
+        if (m.get(n)==null) return false;
+        return m.get(n).containsAll(set);
     }
 
     static class Mapper {
-        private final HashMap<String, Integer> keys = new HashMap<>();
-        private final HashMap<Integer, String> rev = new HashMap<>();
-        void add(String s, int val) {
+        private final HashMap<Set<Character>, Integer> keys = new HashMap<>();
+        private final HashMap<Integer, Set<Character>> rev = new HashMap<>();
+        void add(Set<Character> s, int val) {
             keys.put(s, val);
             rev.put(val, s);
         }
-        int get(String s) {
+        int get(Set<Character> s) {
             return keys.get(s);
         }
-        boolean mapped(String s) {
+        boolean mapped(Set<Character> s) {
             return keys.containsKey(s);
         }
-        String get(int n) {
+        Set<Character> get(int n) {
             return rev.get(n);
         }
-        Map<String, Integer> keys() {
+        Map<Set<Character>, Integer> keys() {
             return keys;
         }
     }

@@ -1,10 +1,24 @@
 package util;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class GridUtil {
+
+    public static char[][] parseCharGrid(List<String> l) {
+        final int h = l.size();
+        final int w = l.get(0).length();
+        char[][] grid = new char[h][w];
+        for (int y=0; y<h; y++) {
+            for (int x=0; x<w; x++) {
+                grid[y][x] = l.get(y).charAt(x);
+            }
+        }
+
+        return grid;
+    }
 
     public static int[][] parseIntGrid(List<String> l) {
         final int h = l.size();
@@ -56,6 +70,23 @@ public class GridUtil {
             }
             System.out.println();
         }
+    }
+
+    public static void debug(char[][] grid) {
+        for (int y=0; y<grid.length; y++) {
+            for (int x=0; x<grid[y].length; x++) {
+                System.out.print(grid[y][x]);
+            }
+            System.out.println();
+        }
+    }
+
+    public static char[][] copy(char[][] grid) {
+        return Arrays.stream(grid).map(char[]::clone).toArray(char[][]::new);
+    }
+
+    public static int[][] copy(int[][] grid) {
+        return Arrays.stream(grid).map(int[]::clone).toArray(int[][]::new);
     }
 
     public static int h(int[][] grid) {

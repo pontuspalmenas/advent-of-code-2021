@@ -19,82 +19,66 @@ public class Day08 {
     }
 
     private static long solve2(List<String> l) {
+        int result = 0;
         for (String s : l) {
-            var inputs = Set.copyOf(Arrays.stream(s.split("\\|")[0].split(" ")).toList());
-
-            var outputs = Arrays.stream(s.split("\\|")[1].split(" ")).toList();
+            // pre-sort the input, need to map all len6 before len5
+            var inputs = Arrays.stream(sortByLen(s.split("\\|")[0])).map(Day08::chars).toList();
+            var outputs = Arrays.stream(s.split("\\| ")[1].split(" ")).map(Day08::chars).toList();
 
             var keys = keys(inputs);
 
-            for (String o : outputs) {
-                System.out.printf("%s: %d\n", o, keys.get(set(o)));
-            }
-
-            var x = 0;
+            result += 1000 * keys.get((outputs.get(0))) +
+                    100 * keys.get(outputs.get(1)) +
+                    10 * keys.get(outputs.get(2)) +
+                    keys.get(outputs.get(3));
         }
 
-        throw new RuntimeException("Not Yet Implemented");
+        return result;
+    }
+
+    private static String[] sortByLen(String s) {
+        String[] ss = s.split(" ");
+        Arrays.sort(ss, (a, b)->Integer.compare(b.length(), a.length()));
+        return ss;
     }
 
 
-    private static Map<Set<Character>, Integer> keys(Set<String> inputs) {
-        // 1 -> 2
-        // 4 -> 4
-        // 7 -> 3
-        // 8 -> 7
+    private static Map<Set<Character>, Integer> keys(List<Set<Character>> inputs) {
         var knownLengths = Map.of(2,1,4,4,3,7,7,8);
 
         var mapper = new Mapper();
 
         // First map all keys of known length
         for (int len : knownLengths.keySet()) {
-            int val = knownLengths.get(len);
-            String key = inputs.stream().filter(s -> s.length() == len).findFirst().orElseThrow();
-            mapper.add(set(key), val);
+            var key = inputs.stream().filter(p -> p.size() == len).findFirst().orElseThrow();
+            mapper.add(key, knownLengths.get(len));
         }
 
         // Deduce the rest
-        for (String s : inputs) {
-            var set = set(s);
+        for (var set : inputs) {
             if (mapper.mapped(set)) continue;
             int len = set.size();
             if (len == 6) { // candidates 6,9,0
-                if (!contains(set,1,mapper)) {
-                    mapper.add(set,6);
-                } else if (contains(set,4,mapper)) {
-                    mapper.add(set,9);
-                } else {
-                    mapper.add(set,0);
-                }
+                if (!contains(set,1,mapper)) mapper.add(set,6);
+                else if (contains(set,4,mapper)) mapper.add(set,9);
+                else mapper.add(set,0);
             }
-            if (len == 5) { // candidates 2,3,5
-                if (containedIn(set,6,mapper)) {
-                    mapper.add(set, 5);
-                } else if (containedIn(set,9,mapper) && contains(set,1,mapper)) {
-                    mapper.add(set, 3);
-                } else {
-                    mapper.add(set, 2);
-                }
+            if (len == 5 && !mapper.mapped(set)) { // candidates 2,3,5
+                if (containedIn(set,6,mapper)) mapper.add(set, 5);
+                else if (containedIn(set,9,mapper) && contains(set,1,mapper)) mapper.add(set, 3);
+                else mapper.add(set, 2);
             }
         }
-
-        debug(mapper);
 
         return mapper.keys();
     }
 
-    private static Set<Character> set(String s) {
+    private static Set<Character> chars(String s) {
         Set<Character> set = new HashSet<>();
         for (char c : s.toCharArray()) {
             set.add(c);
         }
         return set;
-    }
-
-    private static void debug(Mapper mapper) {
-        for (var s : mapper.keys.keySet()) {
-            System.out.printf("%s: %s\n", s, mapper.get(s));
-        }
     }
 
     private static boolean contains(Set<Character> set, int n, Mapper m) {
@@ -112,9 +96,6 @@ public class Day08 {
         void add(Set<Character> s, int val) {
             keys.put(s, val);
             rev.put(val, s);
-        }
-        int get(Set<Character> s) {
-            return keys.get(s);
         }
         boolean mapped(Set<Character> s) {
             return keys.containsKey(s);

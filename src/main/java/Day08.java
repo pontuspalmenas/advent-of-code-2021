@@ -59,7 +59,7 @@ public class Day08 {
             String key = inputs.stream().filter(s -> s.length() == len).findFirst().orElseThrow();
             mapper.add(key, val);
         }
-        
+
         // Deduce the rest
         for (String s : inputs) {
             if (mapper.mapped(s)) continue;
@@ -74,8 +74,12 @@ public class Day08 {
                 }
             }
             if (len == 5) { // candidates 2,3,5
-                if (s.contains(mapper.get(1))) { // 3 contains 1
+                if (containedIn(s,6,mapper)) { // 5 contained in 6
+                    mapper.add(s, 5);
+                } else if (containedIn(s,9,mapper) && contains(s,1,mapper)) {
                     mapper.add(s, 3);
+                } else {
+                    mapper.add(s, 2);
                 }
             }
         }
@@ -92,7 +96,30 @@ public class Day08 {
     }
 
     private static boolean contains(String s, int n, Mapper m) {
-        return s.contains(m.get(n));
+        var l = charset(s, n, m);
+        return l.get(0).containsAll(l.get(1));
+    }
+
+    private static boolean containedIn(String s, int n, Mapper m) {
+        var l = charset(s, n, m);
+        return l.get(1).containsAll(l.get(0));
+    }
+
+    private static List<Set<Character>> charset(String s, int n, Mapper m) {
+        Set<Character> set = new HashSet<>();
+        for (char c : s.toCharArray()) {
+            set.add(c);
+        }
+        Set<Character> set2 = new HashSet<>();
+        if (m.get(n) != null) {
+            for (char c : m.get(n).toCharArray()) {
+                set2.add(c);
+            }
+        }
+        var l = new ArrayList<Set<Character>>();
+        l.add(set);
+        l.add(set2);
+        return l;
     }
 
     static class Mapper {

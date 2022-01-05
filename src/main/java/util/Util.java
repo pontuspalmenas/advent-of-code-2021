@@ -1,10 +1,11 @@
 package util;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class Util {
     // Regex parse all ints from the input
@@ -47,5 +48,13 @@ public class Util {
             out.add(m.group());
         }
         return out;
+    }
+
+    public static <T> Stream<List<T>> chunked(Stream<T> stream, int chunkSize) {
+        AtomicInteger index = new AtomicInteger(0);
+
+        return stream.collect(Collectors.groupingBy(x -> index.getAndIncrement() / chunkSize))
+                .entrySet().stream()
+                .sorted(Map.Entry.comparingByKey()).map(Map.Entry::getValue);
     }
 }

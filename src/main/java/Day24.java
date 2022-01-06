@@ -3,6 +3,7 @@ import util.Util;
 
 import java.util.List;
 import java.util.Stack;
+import java.util.stream.IntStream;
 
 public class Day24 {
 
@@ -56,7 +57,9 @@ public class Day24 {
         int[] ans = new int[14];
         var stack = new Stack<Z>();
         var pairs = pairs(l);
-        for (int i=0; i<14; i++) {
+
+        IntStream.range(0,14).forEach(i ->
+        {
             int x = pairs.get(i).x();
             int y = pairs.get(i).y();
             if (x > 0) stack.push(new Z(y, i));
@@ -65,22 +68,19 @@ public class Day24 {
                 y = v.y;
                 int yix;
                 int n;
+                yix = v.i;
                 if (p2) {
                     n = 1;
-                    yix = v.i;
                     while (n + y + x < 1) n++;
                 } else {
                     n = 9;
-                    yix = v.i;
                     while (n + y + x > 9) n--;
-                    ans[yix] = n;
-                    ans[i] = n + y + x;
                 }
                 ans[yix] = n;
                 ans[i] = n + y + x;
             }
+        });
 
-        }
         long r = 0;
         for (int j : ans) r = r * 10 + j;
         return r;

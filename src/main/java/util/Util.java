@@ -50,6 +50,9 @@ public class Util {
         return out;
     }
 
+    // From https://stackoverflow.com/questions/27583623/is-there-an-elegant-way-to-process-a-stream-in-chunks
+    // Reads the whole stream and then sorts it, instead of chunking mid-stream.
+    // Not optimal for huge streams.
     public static <T> Stream<List<T>> chunked(Stream<T> stream, int chunkSize) {
         AtomicInteger index = new AtomicInteger(0);
 
